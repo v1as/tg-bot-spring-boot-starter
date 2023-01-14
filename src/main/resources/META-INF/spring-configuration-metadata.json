@@ -1,0 +1,20 @@
+{
+  "groups": [
+    {
+      "name": "tg",
+      "type": "ru.v1as.tg.starter.TgBotProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "tg.bot.token",
+      "type": "java.lang.String",
+      "description": "Telegram bot token"
+    },
+    {
+      "name": "tg.bot.username",
+      "type": "java.lang.String",
+      "description": "Telegram bot username"
+    }
+  ]
+}

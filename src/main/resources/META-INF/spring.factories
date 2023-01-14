@@ -1,0 +1,2 @@
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
+ru.v1as.tg.starter.TgBotAutoConfiguration
