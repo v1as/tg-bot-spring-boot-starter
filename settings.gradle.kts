@@ -5,4 +5,4 @@ pluginManagement {
         gradlePluginPortal()
     }
 }
-rootProject.name = "starter"
+rootProject.name = "tg-bot-spring-boot-starter"
