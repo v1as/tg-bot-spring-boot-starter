@@ -2,8 +2,12 @@ package ru.v1as.tg.starter
 
 import org.telegram.telegrambots.bots.TelegramLongPollingBot
 import org.telegram.telegrambots.meta.api.objects.Update
+import ru.v1as.tg.starter.update.UpdateProcessor
 
-class TgLongPollingBot(val props: TgBotProperties, val updateProcessor: TgUpdateProcessor) :
+open class TgLongPollingBot(
+    private val props: TgBotProperties,
+    private val updateProcessor: UpdateProcessor
+) :
     TelegramLongPollingBot() {
 
     override fun getBotToken() = props.token
