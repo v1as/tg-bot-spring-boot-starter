@@ -1,15 +1,11 @@
-package ru.v1as.tg.starter.command
+package ru.v1as.tg.starter.update.command
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
-import org.mockito.Mockito.mock
-import org.mockito.Mockito.`when`
+import org.mockito.Mockito
 import org.telegram.telegrambots.meta.api.objects.Message
 
-
 class CommandRequestTest {
-
     @Test
     fun `Should parse simple command`() {
         val msg = message("/command1")
@@ -27,7 +23,7 @@ class CommandRequestTest {
     @Test
     fun `Should not parse not command`() {
         val ex: IllegalArgumentException =
-            assertThrows { CommandRequest.parse(message("hi!")) }
+            org.junit.jupiter.api.assertThrows { CommandRequest.parse(message("hi!")) }
         assertEquals("Unsupported command format: hi! ", ex.message)
     }
 
@@ -40,7 +36,7 @@ class CommandRequestTest {
 }
 
 private fun message(text: String): Message {
-    val msg: Message = mock(Message::class.java)
-    `when`(msg.text).thenReturn(text)
+    val msg: Message = Mockito.mock(Message::class.java)
+    Mockito.`when`(msg.text).thenReturn(text)
     return msg
 }

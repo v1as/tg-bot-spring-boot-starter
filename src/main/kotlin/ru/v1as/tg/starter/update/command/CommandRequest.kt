@@ -1,4 +1,4 @@
-package ru.v1as.tg.starter.command
+package ru.v1as.tg.starter.update.command
 
 import org.telegram.telegrambots.meta.api.objects.Message
 import java.util.regex.Matcher
@@ -25,6 +25,4 @@ data class CommandRequest(
             return CommandRequest(message, name, botName, arguments)
         }
     }
-
-    fun getMessageId() = message.messageId ?: -1L
 }

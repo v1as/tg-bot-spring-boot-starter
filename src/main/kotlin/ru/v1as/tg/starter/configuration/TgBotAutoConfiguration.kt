@@ -1,17 +1,23 @@
-package ru.v1as.tg.starter
+package ru.v1as.tg.starter.configuration
 
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Import
 import org.telegram.telegrambots.meta.bots.AbsSender
 import org.telegram.telegrambots.meta.generics.LongPollingBot
+import ru.v1as.tg.starter.TgAbsSender
+import ru.v1as.tg.starter.TgBotProperties
+import ru.v1as.tg.starter.TgBotRunner
+import ru.v1as.tg.starter.TgLongPollingBot
 import ru.v1as.tg.starter.update.*
 
 @AutoConfiguration
 @ConditionalOnProperty("tg.bot")
 @EnableConfigurationProperties(TgBotProperties::class)
+@Import(TgCommandsConfiguration::class)
 class TgBotAutoConfiguration {
 
     @Bean
