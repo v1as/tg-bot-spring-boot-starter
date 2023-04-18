@@ -11,6 +11,7 @@ open class BaseUpdateProcessor(
     private val unmatchedUpdateHandler: UnmatchedUpdateHandler,
     private val afterUpdateHandlers: List<AfterUpdateHandler>,
 ) : UpdateProcessor {
+
     override fun process(update: Update) {
         before(update)
         updateHandlers.find { handle(it, update) } ?: unmatched(update)

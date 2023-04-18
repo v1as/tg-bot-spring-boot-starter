@@ -9,18 +9,17 @@ import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Bean
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
-import org.telegram.telegrambots.meta.api.objects.Message
-import org.telegram.telegrambots.meta.api.objects.Update
 import ru.v1as.tg.starter.TgBotRunner
 import ru.v1as.tg.starter.TgLongPollingBot
 import ru.v1as.tg.starter.model.base.TgChatWrapper
 import ru.v1as.tg.starter.model.base.TgUserWrapper
 import ru.v1as.tg.starter.update.command.AbstractCommandHandler
 import ru.v1as.tg.starter.update.command.CommandRequest
+import ru.v1as.tg.starter.update.messageUpdate
 import java.util.concurrent.atomic.AtomicBoolean
 
 @SpringBootTest
-@ContextConfiguration(classes = [TgBotAutoConfiguration::class])
+@ContextConfiguration(classes = [TgBotAutoConfiguration::class, TgCommandsConfigurationTest.Companion.TestableConfiguration::class])
 @TestPropertySource(locations = ["classpath:application.yml"])
 class TgCommandsConfigurationTest {
 
@@ -31,18 +30,20 @@ class TgCommandsConfigurationTest {
     @Autowired
     var bot: TgLongPollingBot? = null
 
-    val processed = AtomicBoolean()
+    @Autowired
+    var testableConfiguration: TestableConfiguration? = null
 
 
     @Test
     fun `Command should be processed`() {
-        bot?.onUpdateReceived(Update().also { it.message = Message() })
-        assertTrue(processed.get())
+        bot?.onUpdateReceived(messageUpdate(text = "/test"))
+        assertTrue(testableConfiguration!!.processed.get())
     }
 
     companion object {
         @TestConfiguration
         class TestableConfiguration {
+            val processed = AtomicBoolean()
 
             @Bean
             fun command() = object : AbstractCommandHandler("test") {
@@ -51,7 +52,7 @@ class TgCommandsConfigurationTest {
                     user: TgUserWrapper,
                     chat: TgChatWrapper
                 ) {
-//                this@TgCommandsConfigurationTest.processed.set(true)
+                    processed.set(true)
                 }
             }
         }

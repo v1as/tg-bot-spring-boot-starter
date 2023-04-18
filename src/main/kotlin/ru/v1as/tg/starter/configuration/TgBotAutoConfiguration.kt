@@ -13,6 +13,8 @@ import ru.v1as.tg.starter.TgBotProperties
 import ru.v1as.tg.starter.TgBotRunner
 import ru.v1as.tg.starter.TgLongPollingBot
 import ru.v1as.tg.starter.update.*
+import ru.v1as.tg.starter.update.request.BaseRequestUpdateHandler
+import ru.v1as.tg.starter.update.request.RequestUpdateHandler
 
 @AutoConfiguration
 @ConditionalOnProperty("tg.bot")
@@ -21,7 +23,16 @@ import ru.v1as.tg.starter.update.*
 class TgBotAutoConfiguration {
 
     @Bean
-    @ConditionalOnMissingBean
+    @ConditionalOnMissingBean(UpdateDataExtractor::class)
+    fun baseUpdateDataExtractor() = BaseUpdateDataExtractor()
+
+    @Bean
+    @ConditionalOnMissingBean(RequestUpdateHandler::class)
+    fun baseRequestUpdateHandler(updateDataExtractor: UpdateDataExtractor) =
+        BaseRequestUpdateHandler(updateDataExtractor)
+
+    @Bean
+    @ConditionalOnMissingBean(UnmatchedUpdateHandler::class)
     fun unmatchedUpdateHandlerStub() = UnmatchedUpdateHandler { }
 
     @Bean
