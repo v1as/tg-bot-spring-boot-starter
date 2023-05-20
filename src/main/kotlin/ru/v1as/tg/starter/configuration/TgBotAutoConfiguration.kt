@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
+import org.springframework.context.annotation.Lazy
 import org.telegram.telegrambots.meta.bots.AbsSender
 import org.telegram.telegrambots.meta.generics.LongPollingBot
 import ru.v1as.tg.starter.TgAbsSender
@@ -17,7 +18,7 @@ import ru.v1as.tg.starter.update.request.BaseRequestUpdateHandler
 import ru.v1as.tg.starter.update.request.RequestUpdateHandler
 
 @AutoConfiguration
-@ConditionalOnProperty("tg.bot")
+@ConditionalOnProperty("tg.bot.token")
 @EnableConfigurationProperties(TgBotProperties::class)
 @Import(TgCommandsConfiguration::class)
 class TgBotAutoConfiguration {
@@ -57,7 +58,7 @@ class TgBotAutoConfiguration {
     fun botRunner(tgBot: LongPollingBot) = TgBotRunner(tgBot)
 
     @Bean
-    fun tgSender(absSender: AbsSender) = TgAbsSender(absSender)
+    fun tgSender(@Lazy absSender: AbsSender) = TgAbsSender(absSender)
 
 }
 

@@ -4,9 +4,21 @@ import org.telegram.telegrambots.meta.api.objects.*
 import java.util.concurrent.atomic.AtomicInteger
 
 private val messageIdCounter = AtomicInteger()
+private val updateIdCounter = AtomicInteger()
 
 
-fun messageUpdate(chatId: Long = 1, userId: Long = 1, text: String = ""): Update {
+fun messageUpdate(text: String = "", chatId: Long = 1, userId: Long = 1): Update {
+    val message = message(text, chatId, userId)
+
+    val update = Update()
+    update.updateId = updateIdCounter.incrementAndGet()
+    update.message = message
+    return update
+}
+
+fun message(
+    text: String, chatId: Long = 1, userId: Long = 1
+): Message {
     val user = User()
     user.id = userId
 
@@ -25,8 +37,5 @@ fun messageUpdate(chatId: Long = 1, userId: Long = 1, text: String = ""): Update
         messageEntity.offset = 0
         message.entities = listOf(messageEntity)
     }
-
-    val update = Update()
-    update.message = message
-    return update
+    return message
 }

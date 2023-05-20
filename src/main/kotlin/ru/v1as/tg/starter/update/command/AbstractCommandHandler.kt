@@ -1,9 +1,9 @@
 package ru.v1as.tg.starter.update.command
 
 import mu.KotlinLogging
-import ru.v1as.tg.starter.update.command.Handled.*
 import ru.v1as.tg.starter.model.base.TgChatWrapper
 import ru.v1as.tg.starter.model.base.TgUserWrapper
+import ru.v1as.tg.starter.update.command.Handled.*
 
 private val log = KotlinLogging.logger {}
 
@@ -30,5 +30,5 @@ abstract class AbstractCommandHandler(
 
     abstract fun handle(command: CommandRequest, user: TgUserWrapper, chat: TgChatWrapper)
 
-    override fun description() = description
+    override fun description() = description.ifEmpty { commandName }
 }

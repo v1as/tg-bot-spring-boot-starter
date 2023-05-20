@@ -2,8 +2,7 @@ package ru.v1as.tg.starter.update.command
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
-import org.mockito.Mockito
-import org.telegram.telegrambots.meta.api.objects.Message
+import ru.v1as.tg.starter.update.message
 
 class CommandRequestTest {
     @Test
@@ -33,10 +32,11 @@ class CommandRequestTest {
         val command = CommandRequest.parse(msg)
         assertEquals(CommandRequest(msg, "c1", "", listOf("1", "2", "3")), command)
     }
-}
 
-private fun message(text: String): Message {
-    val msg: Message = Mockito.mock(Message::class.java)
-    Mockito.`when`(msg.text).thenReturn(text)
-    return msg
+    @Test
+    fun `Should parse start command`() {
+        val msg = message("/start join_-1001144959646")
+        val command = CommandRequest.parse(msg)
+        assertEquals(CommandRequest(msg, "start", "", listOf("join", "-1001144959646")), command)
+    }
 }

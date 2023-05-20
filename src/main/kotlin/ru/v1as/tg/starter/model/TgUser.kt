@@ -18,7 +18,7 @@ interface TgUser : Comparable<TgUser> {
     fun fullName(): String = "${firstName()} ${lastName()}"
 
     fun usernameOrFullName() =
-        if (userName().isEmpty()) "@${userName()}" else fullName()
+        if (userName().isNotEmpty()) "@${userName()}" else fullName()
 
     override fun compareTo(other: TgUser) = id().compareTo(other.id())
 
