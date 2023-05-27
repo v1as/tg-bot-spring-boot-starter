@@ -2,6 +2,7 @@ package ru.v1as.tg.starter.update
 
 import mu.KotlinLogging
 import org.telegram.telegrambots.meta.api.objects.Update
+import ru.v1as.tg.starter.update.exception.UpdateProcessorExceptionHandler
 import ru.v1as.tg.starter.update.handle.Handled
 import ru.v1as.tg.starter.update.handle.error
 import ru.v1as.tg.starter.update.handle.unmatched

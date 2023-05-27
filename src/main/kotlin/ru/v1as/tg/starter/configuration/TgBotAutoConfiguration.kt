@@ -11,6 +11,7 @@ import org.telegram.telegrambots.meta.bots.AbsSender
 import org.telegram.telegrambots.meta.generics.LongPollingBot
 import ru.v1as.tg.starter.*
 import ru.v1as.tg.starter.update.*
+import ru.v1as.tg.starter.update.exception.UpdateProcessorExceptionHandler
 import ru.v1as.tg.starter.update.request.BaseRequestUpdateHandler
 import ru.v1as.tg.starter.update.request.RequestUpdateHandler
 

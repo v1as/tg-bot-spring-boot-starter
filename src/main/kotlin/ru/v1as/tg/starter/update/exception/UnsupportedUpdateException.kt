@@ -1,4 +1,4 @@
-package ru.v1as.tg.starter.update
+package ru.v1as.tg.starter.update.exception
 
 import org.telegram.telegrambots.meta.api.objects.Update
 

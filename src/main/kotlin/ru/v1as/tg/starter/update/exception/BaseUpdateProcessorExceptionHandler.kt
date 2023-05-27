@@ -1,10 +1,11 @@
-package ru.v1as.tg.starter.update
+package ru.v1as.tg.starter.update.exception
 
 import mu.KLogging
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.objects.Update
 import ru.v1as.tg.starter.TgSender
 import ru.v1as.tg.starter.exceptions.TgMessageException
+import ru.v1as.tg.starter.update.UpdateDataExtractor
 
 
 class BaseUpdateProcessorExceptionHandler(

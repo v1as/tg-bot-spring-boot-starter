@@ -6,9 +6,9 @@ import org.springframework.context.annotation.Configuration
 import ru.v1as.tg.starter.TgBotProperties
 import ru.v1as.tg.starter.TgSender
 import ru.v1as.tg.starter.keyboard.StartCommandLinkFactory
-import ru.v1as.tg.starter.update.BaseUpdateProcessorExceptionHandler
+import ru.v1as.tg.starter.update.exception.BaseUpdateProcessorExceptionHandler
 import ru.v1as.tg.starter.update.UpdateDataExtractor
-import ru.v1as.tg.starter.update.UpdateProcessorExceptionHandler
+import ru.v1as.tg.starter.update.exception.UpdateProcessorExceptionHandler
 import ru.v1as.tg.starter.update.command.BaseCommandsHandler
 import ru.v1as.tg.starter.update.command.CommandHandler
 

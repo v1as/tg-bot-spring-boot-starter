@@ -1,6 +1,7 @@
 package ru.v1as.tg.starter.update
 
 import org.telegram.telegrambots.meta.api.objects.Update
+import ru.v1as.tg.starter.update.exception.UnsupportedUpdateException
 
 @Suppress("UNNECESSARY_SAFE_CALL")
 open class BaseUpdateDataExtractor : UpdateDataExtractor {
