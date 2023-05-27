@@ -2,6 +2,7 @@ package ru.v1as.tg.starter.update
 
 import org.telegram.telegrambots.meta.api.objects.Update
 
+@Suppress("UNNECESSARY_SAFE_CALL")
 open class BaseUpdateDataExtractor : UpdateDataExtractor {
 
     override fun userId(update: Update): Long {

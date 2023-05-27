@@ -16,4 +16,18 @@ class TgUserWrapper(val user: User) : TgUser {
     override fun languageCode(): String = user.languageCode ?: ""
 
     override fun model() = user
+
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is TgUser) return false
+
+        if (id() != other.id()) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return id().hashCode()
+    }
+
 }

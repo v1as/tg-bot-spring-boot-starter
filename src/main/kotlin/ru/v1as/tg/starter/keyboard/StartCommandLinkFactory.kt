@@ -6,13 +6,13 @@ import ru.v1as.tg.starter.TgBotProperties
 
 class StartCommandLinkFactory(val tgBot: TgBotProperties) {
 
-    fun inlineKeyboardButtonStartLink(text: String, vararg arguments: Any): InlineKeyboardButton {
+    fun buildButton(text: String, vararg arguments: Any): InlineKeyboardButton {
         val argumentStr = arguments.joinToString("_")
         return InlineKeyboardButton(text).also {
-            it.url = "https://telegram.me/${tgBot.username}?start=join_$argumentStr"
+            it.url = "https://telegram.me/${tgBot.username}?start=$argumentStr"
         }
     }
 
-    fun inlineKeyboardMarkupStartLink(text: String, vararg arguments: Any) =
-        InlineKeyboardMarkup(listOf(listOf(inlineKeyboardButtonStartLink(text, *arguments))))
+    fun buildKeyboard(text: String, vararg arguments: Any) =
+        InlineKeyboardMarkup(listOf(listOf(buildButton(text, *arguments))))
 }

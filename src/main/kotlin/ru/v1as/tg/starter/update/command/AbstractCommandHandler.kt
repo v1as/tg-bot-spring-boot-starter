@@ -1,9 +1,13 @@
 package ru.v1as.tg.starter.update.command
 
 import mu.KotlinLogging
+import ru.v1as.tg.starter.exceptions.TgBotMethodApiException
 import ru.v1as.tg.starter.model.base.TgChatWrapper
 import ru.v1as.tg.starter.model.base.TgUserWrapper
-import ru.v1as.tg.starter.update.command.Handled.*
+import ru.v1as.tg.starter.update.handle.Handled
+import ru.v1as.tg.starter.update.handle.error
+import ru.v1as.tg.starter.update.handle.handled
+import ru.v1as.tg.starter.update.handle.unmatched
 
 private val log = KotlinLogging.logger {}
 
@@ -15,17 +19,19 @@ abstract class AbstractCommandHandler(
 
     override fun handle(command: CommandRequest): Handled {
         if (command.name != commandName) {
-            return Skipped
+            return unmatched()
         }
         val user = TgUserWrapper(command.message.from)
         val chat = TgChatWrapper(command.message.chat)
         try {
             handle(command, user, chat)
-        } catch (e: Exception) {
-            log.error(e) { "Error for command handling $command" }
-            return Error
+        } catch (ex: TgBotMethodApiException) {
+            throw ex
+        } catch (ex: Exception) {
+            log.error(ex) { "Error for command handling $command" }
+            return error(ex)
         }
-        return Done
+        return handled()
     }
 
     abstract fun handle(command: CommandRequest, user: TgUserWrapper, chat: TgChatWrapper)

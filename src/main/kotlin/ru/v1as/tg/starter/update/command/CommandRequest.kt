@@ -31,6 +31,14 @@ data class CommandRequest(
         }
     }
 
+    fun argumentAfter(name: String): String {
+        val argNameIndex = arguments.indexOf(name)
+        if (argNameIndex >= 0 && arguments.size > argNameIndex + 1) {
+            return arguments[argNameIndex + 1]
+        }
+        throw IllegalStateException("No argument after $name for command: $this")
+    }
+
     override fun toString(): String {
         return "CommandRequest(msg='${message.messageId}, from='${from.usernameOrFullName()}', 'name='$name', botName='$botName', arguments=$arguments)"
     }

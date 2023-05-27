@@ -21,6 +21,8 @@ fun message(
 ): Message {
     val user = User()
     user.id = userId
+    user.userName = ""
+    user.firstName = "Bob"
 
     val chat = Chat()
     chat.id = chatId

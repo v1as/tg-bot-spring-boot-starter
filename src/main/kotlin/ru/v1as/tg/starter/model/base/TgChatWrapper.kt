@@ -15,4 +15,18 @@ class TgChatWrapper(val chat: Chat) : TgChat {
 
     override fun model() = chat
 
+    override fun equals(other: Any?): Boolean {
+        if (this === other) return true
+        if (other !is TgChat) return false
+
+        if (getId() != other.getId()) return false
+
+        return true
+    }
+
+    override fun hashCode(): Int {
+        return getId().hashCode()
+    }
+
+
 }
