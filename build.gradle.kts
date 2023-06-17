@@ -3,6 +3,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     `maven-publish`
     `java-library`
+    `java-test-fixtures`
     id("org.springframework.boot") version "2.7.11"
     id("io.spring.dependency-management") version "1.1.0"
     kotlin("jvm") version "1.6.21"
@@ -39,6 +40,8 @@ dependencies {
     testImplementation("org.mockito:mockito-core")
     testImplementation("org.junit.jupiter:junit-jupiter")
     testImplementation("org.assertj:assertj-core")
+
+    testFixturesApi("org.springframework.boot:spring-boot-starter-test")
 }
 
 tasks.withType<KotlinCompile> {
