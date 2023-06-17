@@ -3,28 +3,45 @@ package ru.v1as.tg.starter.update.command
 import mu.KotlinLogging
 import org.telegram.telegrambots.meta.api.objects.Update
 import ru.v1as.tg.starter.update.UpdateHandler
+import ru.v1as.tg.starter.update.handle.Handled
+import ru.v1as.tg.starter.update.handle.error
+import ru.v1as.tg.starter.update.handle.unmatched
+import javax.annotation.PostConstruct
 
 private val log = KotlinLogging.logger {}
 
-class BaseCommandsHandler(private val commandHandlers: List<CommandHandler>) : UpdateHandler {
+class BaseCommandsHandler(
+    private val commandHandlers: List<CommandHandler>
+) : UpdateHandler {
 
-    override fun handle(update: Update): Boolean {
-        if (update.message?.isCommand != true) {
-            return false
+    @PostConstruct
+    fun setup() {
+        for (cmd in commandHandlers) {
+            log.info("Command '${cmd.description()}'(${cmd.javaClass}) registered.")
         }
-        val command = CommandRequest.parse(update.message)
-        log.debug { "Command parsed: $command" }
+    }
+
+    override fun handle(update: Update): Handled {
+        if (update.message?.isCommand != true) {
+            return unmatched()
+        }
+        val message = update.message
+        val command = CommandRequest.parse(message)
+        log.debug { "Command parsed: $command from '${message.text}'" }
+        var handled = unmatched()
         for (commandHandler in commandHandlers) {
             try {
-                val handled = commandHandler.handle(command)
-                log.debug { "Command handling ${commandHandler::class.simpleName} with $handled" }
-                if (handled.finish()) {
-                    return true
+                handled = handled.reduce(commandHandler.handle(command))
+                if (handled.isDone()) {
+                    log.debug { "Command handling ${commandHandler::class.simpleName} with $handled" }
+                    return handled
+                } else {
+                    log.trace { "Command handling ${commandHandler::class.simpleName} with $handled" }
                 }
             } catch (ex: Exception) {
-                log.error(ex) { "Error while command $command handling" }
+                handled = handled.reduce(error(ex))
             }
         }
-        return false
+        return handled
     }
 }

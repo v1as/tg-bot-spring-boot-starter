@@ -15,11 +15,11 @@ class BaseRequestUpdateHandlerTest {
     fun `Should remove one off request`() {
         var mathed = false
         handler.register(UpdateRequest({ mathed = true; true }, ofSeconds(3)))
-        assertTrue(handler.handle(messageUpdate()))
+        assertTrue(handler.handle(messageUpdate()).isDone())
         assertTrue(mathed)
 
         mathed = false
-        assertFalse(handler.handle(messageUpdate()))
+        assertFalse(handler.handle(messageUpdate()).isDone())
         assertFalse(mathed)
     }
 
@@ -27,11 +27,11 @@ class BaseRequestUpdateHandlerTest {
     fun `Should not remove request`() {
         var mathed = false
         handler.register(UpdateRequest({ mathed = true; false }, ofSeconds(3)))
-        assertTrue(handler.handle(messageUpdate()))
+        assertTrue(handler.handle(messageUpdate()).isDone())
         assertTrue(mathed)
 
         mathed = false
-        assertTrue(handler.handle(messageUpdate()))
+        assertTrue(handler.handle(messageUpdate()).isDone())
         assertTrue(mathed)
     }
 
@@ -39,7 +39,7 @@ class BaseRequestUpdateHandlerTest {
     fun `Should match userId and chatId`() {
         var mathed = false
         handler.register(UpdateRequest({ mathed = true; true }, ofSeconds(3), 1, 1))
-        assertTrue(handler.handle(messageUpdate(chatId = 1, userId = 1)))
+        assertTrue(handler.handle(messageUpdate(chatId = 1, userId = 1)).isDone())
         assertTrue(mathed)
     }
 
@@ -47,7 +47,7 @@ class BaseRequestUpdateHandlerTest {
     fun `Should not match wrong userId`() {
         var mathed = false
         handler.register(UpdateRequest({ mathed = true; true }, ofSeconds(3), 2, 1))
-        assertFalse(handler.handle(messageUpdate(chatId = 1, userId = 1)))
+        assertFalse(handler.handle(messageUpdate(chatId = 1, userId = 1)).isDone())
         assertFalse(mathed)
     }
 
@@ -55,7 +55,7 @@ class BaseRequestUpdateHandlerTest {
     fun `Should not match wrong chatId`() {
         var mathed = false
         handler.register(UpdateRequest({ mathed = true; true }, ofSeconds(3), 1, 2))
-        assertFalse(handler.handle(messageUpdate(chatId = 1, userId = 1)))
+        assertFalse(handler.handle(messageUpdate(chatId = 1, userId = 1)).isDone())
         assertFalse(mathed)
     }
 }

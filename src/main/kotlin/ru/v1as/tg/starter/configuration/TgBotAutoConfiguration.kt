@@ -6,18 +6,17 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
+import org.springframework.context.annotation.Lazy
 import org.telegram.telegrambots.meta.bots.AbsSender
 import org.telegram.telegrambots.meta.generics.LongPollingBot
-import ru.v1as.tg.starter.TgAbsSender
-import ru.v1as.tg.starter.TgBotProperties
-import ru.v1as.tg.starter.TgBotRunner
-import ru.v1as.tg.starter.TgLongPollingBot
+import ru.v1as.tg.starter.*
 import ru.v1as.tg.starter.update.*
+import ru.v1as.tg.starter.update.exception.UpdateProcessorExceptionHandler
 import ru.v1as.tg.starter.update.request.BaseRequestUpdateHandler
 import ru.v1as.tg.starter.update.request.RequestUpdateHandler
 
 @AutoConfiguration
-@ConditionalOnProperty("tg.bot")
+@ConditionalOnProperty("tg.bot.token")
 @EnableConfigurationProperties(TgBotProperties::class)
 @Import(TgCommandsConfiguration::class)
 class TgBotAutoConfiguration {
@@ -41,13 +40,15 @@ class TgBotAutoConfiguration {
         updateHandlers: List<UpdateHandler>,
         unmatchedUpdateHandler: UnmatchedUpdateHandler,
         afterUpdateHandlers: List<AfterUpdateHandler>,
-    ) =
-        BaseUpdateProcessor(
-            beforeUpdateHandlers,
-            updateHandlers,
-            unmatchedUpdateHandler,
-            afterUpdateHandlers
-        )
+        baseUpdateDataExtractor: BaseUpdateDataExtractor,
+        updateProcessorExceptionHandler: UpdateProcessorExceptionHandler
+    ) = BaseUpdateProcessor(
+        beforeUpdateHandlers,
+        updateHandlers,
+        updateProcessorExceptionHandler,
+        unmatchedUpdateHandler,
+        afterUpdateHandlers,
+    )
 
     @Bean
     fun longPollingBot(props: TgBotProperties, updateProcessor: UpdateProcessor) =
@@ -57,7 +58,7 @@ class TgBotAutoConfiguration {
     fun botRunner(tgBot: LongPollingBot) = TgBotRunner(tgBot)
 
     @Bean
-    fun tgSender(absSender: AbsSender) = TgAbsSender(absSender)
+    fun tgSender(@Lazy absSender: AbsSender) = TgAbsSender(absSender)
 
 }
 

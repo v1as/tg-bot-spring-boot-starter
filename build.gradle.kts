@@ -3,15 +3,18 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 plugins {
     `maven-publish`
     `java-library`
-    id("org.springframework.boot") version "2.7.8-SNAPSHOT"
-    id("io.spring.dependency-management") version "1.0.15.RELEASE"
+    id("org.springframework.boot") version "2.7.11"
+    id("io.spring.dependency-management") version "1.1.0"
     kotlin("jvm") version "1.6.21"
     kotlin("plugin.spring") version "1.6.21"
 }
 
 group = "com.github.v1as"
 version = "0.0.2"
-java.sourceCompatibility = JavaVersion.VERSION_17
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    withSourcesJar()
+}
 
 configurations {
     compileOnly {
@@ -21,8 +24,6 @@ configurations {
 
 repositories {
     mavenCentral()
-    maven { url = uri("https://repo.spring.io/milestone") }
-    maven { url = uri("https://repo.spring.io/snapshot") }
 }
 
 dependencies {
