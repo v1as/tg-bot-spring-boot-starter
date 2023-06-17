@@ -1,10 +1,10 @@
 package ru.v1as.tg.starter.update.command
 
+import java.util.regex.Matcher
+import java.util.regex.Pattern
 import org.telegram.telegrambots.meta.api.objects.Message
 import ru.v1as.tg.starter.model.TgUser
 import ru.v1as.tg.starter.model.base.TgUserWrapper
-import java.util.regex.Matcher
-import java.util.regex.Pattern
 
 private val PATTERN_WITH_NAME = Pattern.compile("/([\\w\\d_]+)@?([\\w\\d_]+)?(\\s)?(.*)")
 
@@ -12,7 +12,8 @@ data class CommandRequest(
     val message: Message,
     val name: String,
     val botName: String = "",
-    val arguments: List<String> = emptyList()
+    val argumentsString: String = "",
+    val arguments: List<String> = emptyList(),
 ) {
     val from: TgUser = TgUserWrapper(message.from)
 
@@ -24,10 +25,14 @@ data class CommandRequest(
             val name = matcher.group(1)
             val botName = matcher.group(2) ?: ""
             val arguments: List<String> =
-                matcher.group(4).split(' ', ';', '_').stream().map { it.trim() }
+                matcher
+                    .group(4)
+                    .split(' ', ';', '_', ',')
+                    .stream()
+                    .map { it.trim() }
                     .filter { it.isNotEmpty() }
                     .toList()
-            return CommandRequest(message, name, botName, arguments)
+            return CommandRequest(message, name, botName, matcher.group(4), arguments)
         }
     }
 
