@@ -7,18 +7,22 @@ import ru.v1as.tg.starter.update.exception.UnsupportedUpdateException
 open class BaseUpdateDataExtractor : UpdateDataExtractor {
 
     override fun userId(update: Update): Long {
-        return update?.message?.from?.id ?: unsupportedUserIdExtraction(update)
+        return update?.message?.from?.id
+            ?: update?.callbackQuery?.from?.id
+            ?: unsupportedUserIdExtraction(update)
     }
 
-    protected fun unsupportedUserIdExtraction(update: Update): Long {
+    open protected fun unsupportedUserIdExtraction(update: Update): Long {
         throw UnsupportedUpdateException(update)
     }
 
     override fun chatId(update: Update): Long {
-        return update?.message?.chatId ?: unsupportedChatIdExtraction(update)
+        return update?.message?.chatId
+            ?: update?.callbackQuery?.message?.chatId
+            ?: unsupportedChatIdExtraction(update)
     }
 
-    protected fun unsupportedChatIdExtraction(update: Update): Long {
+    open protected fun unsupportedChatIdExtraction(update: Update): Long {
         throw UnsupportedUpdateException(update)
     }
 }

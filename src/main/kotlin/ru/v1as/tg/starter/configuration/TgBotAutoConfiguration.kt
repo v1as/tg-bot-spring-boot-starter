@@ -18,7 +18,7 @@ import ru.v1as.tg.starter.update.request.RequestUpdateHandler
 @AutoConfiguration
 @ConditionalOnProperty("tg.bot.token")
 @EnableConfigurationProperties(TgBotProperties::class)
-@Import(TgCommandsConfiguration::class)
+@Import(TgCommandsConfiguration::class, TgCallbacksConfiguration::class)
 class TgBotAutoConfiguration {
 
     @Bean

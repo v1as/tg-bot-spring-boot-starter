@@ -33,14 +33,17 @@ class CommandRequestTest {
     fun `Should parse command with arguments`() {
         val msg = message("/c1 1   2 3")
         val command = CommandRequest.parse(msg)
-        assertEquals(CommandRequest(msg, "c1", "", listOf("1", "2", "3")), command)
+        assertEquals(CommandRequest(msg, "c1", "", "1   2 3", listOf("1", "2", "3")), command)
     }
 
     @Test
     fun `Should parse start command`() {
         val msg = message("/start join_-1001144959646")
         val command = CommandRequest.parse(msg)
-        assertEquals(CommandRequest(msg, "start", "", listOf("join", "-1001144959646")), command)
+        assertEquals(
+            CommandRequest(msg, "start", "", "join_-1001144959646", listOf("join", "-1001144959646")),
+            command
+        )
     }
 
     @ParameterizedTest
