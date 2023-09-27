@@ -1,28 +1,31 @@
 package ru.v1as.tg.starter.update
 
 import org.telegram.telegrambots.meta.api.objects.Update
+import ru.v1as.tg.starter.model.TgChat
+import ru.v1as.tg.starter.model.TgUser
+import ru.v1as.tg.starter.model.base.TgChatWrapper
+import ru.v1as.tg.starter.model.base.TgUserWrapper
 import ru.v1as.tg.starter.update.exception.UnsupportedUpdateException
 
-@Suppress("UNNECESSARY_SAFE_CALL")
 open class BaseUpdateDataExtractor : UpdateDataExtractor {
 
-    override fun userId(update: Update): Long {
-        return update?.message?.from?.id
-            ?: update?.callbackQuery?.from?.id
+    override fun user(update: Update): TgUser {
+        return update.message?.from?.let { TgUserWrapper(it) }
+            ?: update.callbackQuery?.from?.let { TgUserWrapper(it) }
             ?: unsupportedUserIdExtraction(update)
     }
 
-    open protected fun unsupportedUserIdExtraction(update: Update): Long {
-        throw UnsupportedUpdateException(update)
+    protected open fun unsupportedUserIdExtraction(update: Update): TgUser {
+        throw UnsupportedUpdateException(update, "Unsupported userId extraction")
     }
 
-    override fun chatId(update: Update): Long {
-        return update?.message?.chatId
-            ?: update?.callbackQuery?.message?.chatId
+    override fun chat(update: Update): TgChat {
+        return update.message?.chat?.let { TgChatWrapper(it) }
+            ?: update.callbackQuery?.message?.chat?.let { TgChatWrapper(it) }
             ?: unsupportedChatIdExtraction(update)
     }
 
-    open protected fun unsupportedChatIdExtraction(update: Update): Long {
-        throw UnsupportedUpdateException(update)
+    protected open fun unsupportedChatIdExtraction(update: Update): TgChat {
+        throw UnsupportedUpdateException(update, "Unsupported chatId extraction")
     }
 }

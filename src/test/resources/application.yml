@@ -1,3 +1,4 @@
 tg.bot:
   token: TEST_TOKEN
   username: TEST_BOT
+  runnable: false

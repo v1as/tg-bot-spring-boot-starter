@@ -6,7 +6,8 @@ import ru.v1as.tg.starter.update.handle.Handled
 import ru.v1as.tg.starter.update.handle.handled
 import ru.v1as.tg.starter.update.handle.unmatched
 
-open class BaseRequestUpdateHandler(private val updateDataExtractor: UpdateDataExtractor) : RequestUpdateHandler {
+open class BaseRequestUpdateHandler(private val updateDataExtractor: UpdateDataExtractor) :
+    RequestUpdateHandler {
     private val requests: MutableList<UpdateRequest> = mutableListOf()
 
     override fun register(request: UpdateRequest) {
@@ -14,8 +15,8 @@ open class BaseRequestUpdateHandler(private val updateDataExtractor: UpdateDataE
     }
 
     override fun handle(update: Update): Handled {
-        val chatId = updateDataExtractor.chatId(update)
-        val userId = updateDataExtractor.userId(update)
+        val chatId = updateDataExtractor.chat(update).getId()
+        val userId = updateDataExtractor.user(update).id()
         val requestIterator = requests.iterator()
         for (request in requestIterator) {
             if (request.chatId != null && chatId != request.chatId) {

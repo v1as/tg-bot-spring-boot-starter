@@ -19,7 +19,7 @@ class BaseUpdateProcessorExceptionHandler(
 
     override fun handle(ex: Exception, update: Update) {
         if (ex is TgMessageException) {
-            val chatId = updateDataExtractor.chatId(update).toString()
+            val chatId = updateDataExtractor.chat(update).idStr()
             tgSender.execute(SendMessage(chatId, ex.responseText))
             logger.debug { "Response message '${ex.responseText}' from exception to chatId $chatId" }
             return

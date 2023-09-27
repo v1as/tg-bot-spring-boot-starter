@@ -9,9 +9,14 @@ import org.springframework.context.annotation.Import
 import org.springframework.context.annotation.Lazy
 import org.telegram.telegrambots.meta.bots.AbsSender
 import org.telegram.telegrambots.meta.generics.LongPollingBot
-import ru.v1as.tg.starter.*
+import ru.v1as.tg.starter.TgAbsSender
+import ru.v1as.tg.starter.TgBotProperties
+import ru.v1as.tg.starter.TgBotRunner
+import ru.v1as.tg.starter.TgLongPollingBot
 import ru.v1as.tg.starter.update.*
 import ru.v1as.tg.starter.update.exception.UpdateProcessorExceptionHandler
+import ru.v1as.tg.starter.update.log.BaseMdcUpdate
+import ru.v1as.tg.starter.update.log.MdcUpdate
 import ru.v1as.tg.starter.update.request.BaseRequestUpdateHandler
 import ru.v1as.tg.starter.update.request.RequestUpdateHandler
 
@@ -35,6 +40,12 @@ class TgBotAutoConfiguration {
     fun unmatchedUpdateHandlerStub() = UnmatchedUpdateHandler { }
 
     @Bean
+    @ConditionalOnMissingBean(MdcUpdate::class)
+    fun baseMdcUpdate(baseUpdateDataExtractor: BaseUpdateDataExtractor) = BaseMdcUpdate(
+        baseUpdateDataExtractor
+    )
+
+    @Bean
     fun baseUpdateProcessor(
         beforeUpdateHandlers: List<BeforeUpdateHandler>,
         updateHandlers: List<UpdateHandler>,
@@ -55,7 +66,7 @@ class TgBotAutoConfiguration {
         TgLongPollingBot(props, updateProcessor)
 
     @Bean
-    fun botRunner(tgBot: LongPollingBot) = TgBotRunner(tgBot)
+    fun botRunner(tgBot: LongPollingBot, props: TgBotProperties) = TgBotRunner(tgBot, props)
 
     @Bean
     fun tgSender(@Lazy absSender: AbsSender) = TgAbsSender(absSender)

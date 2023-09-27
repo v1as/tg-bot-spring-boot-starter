@@ -9,12 +9,21 @@
     {
       "name": "tg.bot.token",
       "type": "java.lang.String",
-      "description": "Telegram bot token"
+      "description": "Telegram bot token",
+      "sourceType": "ru.v1as.tg.starter.TgBotProperties"
     },
     {
       "name": "tg.bot.username",
       "type": "java.lang.String",
-      "description": "Telegram bot username"
+      "description": "Telegram bot username",
+      "sourceType": "ru.v1as.tg.starter.TgBotProperties"
+    },
+    {
+      "name": "tg.bot.runnable",
+      "type": "java.lang.Boolean",
+      "description": "Running bot on start",
+      "sourceType": "ru.v1as.tg.starter.TgBotProperties",
+      "defaultValue": "true"
     }
   ]
 }
