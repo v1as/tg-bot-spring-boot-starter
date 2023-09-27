@@ -13,13 +13,13 @@ abstract class AbstractCallbackWithPrefixHandler(val prefix: String) : CallbackH
         if (!input.data.startsWith(prefix)) {
             return unmatched()
         }
-        try {
-            handle(input.data.substring(prefix.length), input.chat, input.from)
-            return handled()
+        return try {
+            handle(input.data.substring(prefix.length), input.chat, input.from, input)
+            handled()
         } catch (e: Exception) {
-            return error(e)
+            error(e)
         }
     }
 
-    abstract fun handle(value: String, chat: TgChat, user: TgUser)
+    abstract fun handle(input: String, chat: TgChat, user: TgUser, callbackRequest: CallbackRequest)
 }

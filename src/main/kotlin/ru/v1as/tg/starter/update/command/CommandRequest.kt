@@ -14,7 +14,7 @@ data class CommandRequest(
     val botName: String = "",
     val argumentsString: String = "",
     val arguments: List<String> = emptyList(),
-) {
+)  {
     val from: TgUser = TgUserWrapper(message.from)
 
     companion object {
