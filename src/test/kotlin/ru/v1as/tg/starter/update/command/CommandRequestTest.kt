@@ -5,19 +5,19 @@ import org.junit.jupiter.api.Assertions.assertThrows
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.CsvSource
-import ru.v1as.tg.starter.update.message
+import ru.v1as.tg.starter.update.messageUpdate
 
 class CommandRequestTest {
     @Test
     fun `Should parse simple command`() {
-        val msg = message("/command1")
+        val msg = messageUpdate("/command1")
         val command = CommandRequest.parse(msg)
         assertEquals(CommandRequest(msg, "command1"), command)
     }
 
     @Test
     fun `Should parse command with bot name`() {
-        val msg = message("/c_1@name")
+        val msg = messageUpdate("/c_1@name")
         val command = CommandRequest.parse(msg)
         assertEquals(CommandRequest(msg, "c_1", "name"), command)
     }
@@ -25,23 +25,29 @@ class CommandRequestTest {
     @Test
     fun `Should not parse not command`() {
         val ex: IllegalArgumentException =
-            org.junit.jupiter.api.assertThrows { CommandRequest.parse(message("hi!")) }
+            org.junit.jupiter.api.assertThrows { CommandRequest.parse(messageUpdate("hi!")) }
         assertEquals("Unsupported command format: hi! ", ex.message)
     }
 
     @Test
     fun `Should parse command with arguments`() {
-        val msg = message("/c1 1   2 3")
+        val msg = messageUpdate("/c1 1   2 3")
         val command = CommandRequest.parse(msg)
         assertEquals(CommandRequest(msg, "c1", "", "1   2 3", listOf("1", "2", "3")), command)
     }
 
     @Test
     fun `Should parse start command`() {
-        val msg = message("/start join_-1001144959646")
+        val msg = messageUpdate("/start join_-1001144959646")
         val command = CommandRequest.parse(msg)
         assertEquals(
-            CommandRequest(msg, "start", "", "join_-1001144959646", listOf("join", "-1001144959646")),
+            CommandRequest(
+                msg,
+                "start",
+                "",
+                "join_-1001144959646",
+                listOf("join", "-1001144959646")
+            ),
             command
         )
     }
@@ -53,16 +59,16 @@ class CommandRequestTest {
         "/test arg 3 arg2 4,arg2,4",
     )
     fun `Should find argument`(cmd: String, arg: String, value: String) {
-        val parsed = CommandRequest.parse(message(cmd))
+        val parsed = CommandRequest.parse(messageUpdate(cmd))
         assertEquals(value, parsed.argumentAfter(arg))
     }
 
     @Test
     fun `Should throw exception if no arg`() {
-        var cmd = CommandRequest.parse(message("/test"))
+        var cmd = CommandRequest.parse(messageUpdate("/test"))
         assertThrows(IllegalStateException::class.java) { cmd.argumentAfter("arg") }
 
-        cmd = CommandRequest.parse(message("/test arg"))
+        cmd = CommandRequest.parse(messageUpdate("/test arg"))
         assertThrows(IllegalStateException::class.java) { cmd.argumentAfter("arg") }
     }
 }

@@ -21,9 +21,8 @@ class BaseCommandsHandler(
         if (input.message?.isCommand != true) {
             return null
         }
-        val message = input.message
-        val command = CommandRequest.parse(message)
-        log.debug { "Command parsed: $command from '${message.text}'" }
+        val command = CommandRequest.parse(input)
+        log.debug { "Command parsed: $command from '${input.message.text}'" }
         return command
     }
 }
