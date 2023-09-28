@@ -8,9 +8,7 @@ open class TgLongPollingBot(
     private val props: TgBotProperties,
     private val updateProcessor: UpdateProcessor
 ) :
-    TelegramLongPollingBot() {
-
-    override fun getBotToken() = props.token
+    TelegramLongPollingBot(props.token) {
 
     override fun getBotUsername() = props.username
 

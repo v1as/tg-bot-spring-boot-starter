@@ -7,8 +7,9 @@ import ru.v1as.tg.starter.model.base.TgUserWrapper
 import ru.v1as.tg.starter.update.UpdateRequest
 import java.util.regex.Matcher
 import java.util.regex.Pattern
+import java.util.regex.Pattern.DOTALL
 
-private val PATTERN_WITH_NAME = Pattern.compile("/([\\w\\d_]+)@?([\\w\\d_]+)?(\\s)?(.*)")
+private val PATTERN_WITH_NAME = Pattern.compile("/([\\w\\d_]+)@?([\\w\\d_]+)?(\\s)?(.*)", DOTALL)
 
 data class CommandRequest(
     override val update: Update,
@@ -26,15 +27,10 @@ data class CommandRequest(
             require(matcher.matches()) { "Unsupported command format: $text " }
             val name = matcher.group(1)
             val botName = matcher.group(2) ?: ""
-            val argumentsString = matcher
-                .group(4)
+            val argumentsString = matcher.group(4)
             val arguments: List<String> =
-                argumentsString
-                    .split(' ', ';', '_', ',')
-                    .stream()
-                    .map { it.trim() }
-                    .filter { it.isNotEmpty() }
-                    .toList()
+                argumentsString.split(' ', ';', '_', ',', '\t', '\r', '\n').stream()
+                    .map { it.trim() }.filter { it.isNotEmpty() }.toList()
             return CommandRequest(update, name, botName, argumentsString, arguments)
         }
     }
@@ -48,6 +44,6 @@ data class CommandRequest(
     }
 
     override fun toString(): String {
-        return "CommandRequest(msg='${message.messageId}, from='${from.usernameOrFullName()}', 'name='$name', botName='$botName', arguments=$arguments)"
+        return "CommandRequest(msg='${message.messageId}', from='${from.usernameOrFullName()}', 'name='$name', botName='$botName', arguments=$arguments)"
     }
 }

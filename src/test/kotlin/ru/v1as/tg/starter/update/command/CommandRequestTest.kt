@@ -64,6 +64,12 @@ class CommandRequestTest {
     }
 
     @Test
+    fun `Should parse new line`() {
+        val parsed = CommandRequest.parse(messageUpdate("/test arg\n3"))
+        assertEquals("3", parsed.argumentAfter("arg"))
+    }
+
+    @Test
     fun `Should throw exception if no arg`() {
         var cmd = CommandRequest.parse(messageUpdate("/test"))
         assertThrows(IllegalStateException::class.java) { cmd.argumentAfter("arg") }
