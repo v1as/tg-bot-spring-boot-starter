@@ -3,6 +3,7 @@ package ru.v1as.tg.starter.update
 import org.telegram.telegrambots.meta.api.methods.AnswerCallbackQuery
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 
 fun editMessageText(block: EditMessageText.() -> Unit): EditMessageText {
     val edit = EditMessageText()
@@ -20,4 +21,10 @@ fun answerCallbackQuery(block: AnswerCallbackQuery.() -> Unit): AnswerCallbackQu
     val query = AnswerCallbackQuery()
     query.apply(block)
     return query
+}
+
+fun inlineKeyboardButton(block: InlineKeyboardButton.() -> Unit): InlineKeyboardButton {
+    val button = InlineKeyboardButton()
+    button.apply(block)
+    return button
 }
