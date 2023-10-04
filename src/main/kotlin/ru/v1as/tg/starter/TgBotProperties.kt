@@ -6,5 +6,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties
 class TgBotProperties(
     var token: String = "",
     var username: String = "",
-    var runnable: Boolean = true
+    var runnable: Boolean = true,
+    var gracefulShutdown: Boolean = true,
 )

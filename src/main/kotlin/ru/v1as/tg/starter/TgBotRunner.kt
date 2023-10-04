@@ -23,13 +23,15 @@ open class TgBotRunner(
         if (props.runnable) {
             this.session = telegramBotApi.registerBot(tgBot)
             log.info { "Bot '${tgBot.botUsername}' started" }
-        } else{
+        } else {
             log.info { "Bot '${tgBot.botUsername}' is not runnable" }
         }
     }
 
     override fun destroy() {
-        this.session?.stop()
-        log.info { "Bot '${tgBot.botUsername}' stopped" }
+        if (props.gracefulShutdown) {
+            this.session?.stop()
+            log.info { "Bot '${tgBot.botUsername}' stopped" }
+        }
     }
 }

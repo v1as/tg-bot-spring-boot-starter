@@ -24,6 +24,13 @@
       "description": "Running bot on start",
       "sourceType": "ru.v1as.tg.starter.TgBotProperties",
       "defaultValue": "true"
+    },
+    {
+      "name": "tg.bot.graceful-shutdown",
+      "type": "java.lang.Boolean",
+      "description": "Graceful bot shutdown with session stop waiting",
+      "sourceType": "ru.v1as.tg.starter.TgBotProperties",
+      "defaultValue": "true"
     }
   ]
 }
