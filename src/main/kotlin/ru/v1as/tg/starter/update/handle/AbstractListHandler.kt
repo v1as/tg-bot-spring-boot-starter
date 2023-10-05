@@ -1,12 +1,12 @@
 package ru.v1as.tg.starter.update.handle
 
-import mu.KLogging
+import mu.KLoggable
 import javax.annotation.PostConstruct
 
 
-abstract class AbstractListHandler<T, I>(private val handlers: List<Handler<I>>) : Handler<T> {
+abstract class AbstractListHandler<T, I>(private val handlers: List<Handler<I>>) : Handler<T>, KLoggable {
 
-    companion object : KLogging()
+    override val logger = logger()
 
     @PostConstruct
     fun setup() {
