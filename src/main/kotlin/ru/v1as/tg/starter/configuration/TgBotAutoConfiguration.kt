@@ -17,6 +17,7 @@ import ru.v1as.tg.starter.update.*
 import ru.v1as.tg.starter.update.exception.UpdateProcessorExceptionHandler
 import ru.v1as.tg.starter.update.log.BaseMdcUpdate
 import ru.v1as.tg.starter.update.log.MdcUpdate
+import ru.v1as.tg.starter.update.member.LogChatMemberUpdatedHandler
 import ru.v1as.tg.starter.update.request.BaseRequestUpdateHandler
 import ru.v1as.tg.starter.update.request.RequestUpdateHandler
 
@@ -44,6 +45,9 @@ class TgBotAutoConfiguration {
     fun baseMdcUpdate(baseUpdateDataExtractor: BaseUpdateDataExtractor) = BaseMdcUpdate(
         baseUpdateDataExtractor
     )
+
+    @Bean
+    fun logChatMemberUpdatedHandler() = LogChatMemberUpdatedHandler()
 
     @Bean
     fun baseUpdateProcessor(

@@ -12,6 +12,7 @@ open class BaseUpdateDataExtractor : UpdateDataExtractor {
     override fun user(update: Update): TgUser {
         return update.message?.from?.let { TgUserWrapper(it) }
             ?: update.callbackQuery?.from?.let { TgUserWrapper(it) }
+            ?: update.myChatMember?.from?.let { TgUserWrapper(it) }
             ?: unsupportedUserIdExtraction(update)
     }
 
@@ -22,6 +23,7 @@ open class BaseUpdateDataExtractor : UpdateDataExtractor {
     override fun chat(update: Update): TgChat {
         return update.message?.chat?.let { TgChatWrapper(it) }
             ?: update.callbackQuery?.message?.chat?.let { TgChatWrapper(it) }
+            ?: update.myChatMember?.chat?.let { TgChatWrapper(it) }
             ?: unsupportedChatIdExtraction(update)
     }
 
