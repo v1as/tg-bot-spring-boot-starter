@@ -7,6 +7,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
 import org.springframework.context.annotation.Lazy
+import org.telegram.telegrambots.bots.DefaultBotOptions
 import org.telegram.telegrambots.meta.bots.AbsSender
 import org.telegram.telegrambots.meta.generics.LongPollingBot
 import ru.v1as.tg.starter.TgAbsSender
@@ -66,8 +67,16 @@ class TgBotAutoConfiguration {
     )
 
     @Bean
-    fun longPollingBot(props: TgBotProperties, updateProcessor: UpdateProcessor) =
-        TgLongPollingBot(props, updateProcessor)
+    @ConditionalOnMissingBean
+    fun botOptions() = DefaultBotOptions()
+
+    @Bean
+    fun longPollingBot(
+        options: DefaultBotOptions,
+        props: TgBotProperties,
+        updateProcessor: UpdateProcessor
+    ) =
+        TgLongPollingBot(options, props, updateProcessor)
 
     @Bean
     fun botRunner(tgBot: LongPollingBot, props: TgBotProperties) = TgBotRunner(tgBot, props)
