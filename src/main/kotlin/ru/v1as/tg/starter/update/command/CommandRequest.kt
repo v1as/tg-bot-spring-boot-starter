@@ -29,7 +29,7 @@ data class CommandRequest(
             val botName = matcher.group(2) ?: ""
             val argumentsString = matcher.group(4)
             val arguments: List<String> =
-                argumentsString.split(' ', ';', '_', ',', '\t', '\r', '\n').stream()
+                argumentsString.split(' ', ';', '_', ',', '\t', '\r', '\n')
                     .map { it.trim() }.filter { it.isNotEmpty() }.toList()
             return CommandRequest(update, name, botName, argumentsString, arguments)
         }

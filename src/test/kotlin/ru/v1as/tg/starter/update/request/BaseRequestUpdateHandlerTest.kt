@@ -1,9 +1,9 @@
 package ru.v1as.tg.starter.update.request
 
-import org.junit.jupiter.api.Assertions.assertFalse
-import org.junit.jupiter.api.Assertions.assertTrue
+import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import ru.v1as.tg.starter.update.BaseUpdateDataExtractor
+import ru.v1as.tg.starter.update.handle.HandledType
 import ru.v1as.tg.starter.update.messageUpdate
 import java.time.Duration.ofSeconds
 
@@ -24,15 +24,34 @@ class BaseRequestUpdateHandlerTest {
     }
 
     @Test
-    fun `Should not remove request`() {
+    fun `Should match on exception of matching`() {
         var mathed = false
-        handler.register(UpdateRequest({ mathed = true; false }, ofSeconds(3)))
-        assertTrue(handler.handle(messageUpdate()).isDone())
+        handler.register(UpdateRequest({ mathed = true; throw RuntimeException() }, ofSeconds(3)))
+        assertEquals(HandledType.ERROR, handler.handle(messageUpdate()).type)
         assertTrue(mathed)
 
         mathed = false
-        assertTrue(handler.handle(messageUpdate()).isDone())
-        assertTrue(mathed)
+        assertFalse(handler.handle(messageUpdate()).isDone())
+        assertFalse(mathed)
+    }
+
+    @Test
+    fun `Canceled should not match`() {
+        var mathed = false
+        val request = UpdateRequest({ mathed = true; true }, ofSeconds(3))
+        handler.register(request)
+        request.cancel()
+        assertFalse(handler.handle(messageUpdate()).isDone())
+        assertFalse(mathed)
+    }
+
+    @Test
+    fun `Should not match on filtering exception`() {
+        var mathed = false
+        val request = UpdateRequest({ mathed = true; true }, ofSeconds(3), filter = { throw RuntimeException() })
+        handler.register(request)
+        assertFalse(handler.handle(messageUpdate()).isDone())
+        assertFalse(mathed)
     }
 
     @Test

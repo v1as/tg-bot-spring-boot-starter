@@ -4,14 +4,14 @@ plugins {
     `maven-publish`
     `java-library`
     `java-test-fixtures`
-    id("org.springframework.boot") version "2.7.11"
+    id("org.springframework.boot") version "2.7.12"
     id("io.spring.dependency-management") version "1.1.0"
     kotlin("jvm") version "1.6.21"
     kotlin("plugin.spring") version "1.6.21"
 }
 
 group = "com.github.v1as"
-version = "0.0.2"
+version = "0.0.3"
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     withSourcesJar()
