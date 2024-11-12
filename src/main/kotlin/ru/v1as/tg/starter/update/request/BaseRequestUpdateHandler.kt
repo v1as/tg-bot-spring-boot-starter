@@ -2,12 +2,12 @@ package ru.v1as.tg.starter.update.request
 
 import mu.KLogging
 import org.telegram.telegrambots.meta.api.objects.Update
+import ru.operation.handler.Handled
+import ru.operation.handler.Handled.error
+import ru.operation.handler.Handled.handled
+import ru.operation.handler.Handled.skipped
 import ru.v1as.tg.starter.update.UpdateDataExtractor
 import ru.v1as.tg.starter.update.UpdateHandler
-import ru.v1as.tg.starter.update.handle.Handled
-import ru.v1as.tg.starter.update.handle.error
-import ru.v1as.tg.starter.update.handle.handled
-import ru.v1as.tg.starter.update.handle.unmatched
 
 open class BaseRequestUpdateHandler(private val updateDataExtractor: UpdateDataExtractor) :
     RequestUpdateHandler, UpdateHandler {
@@ -58,7 +58,7 @@ open class BaseRequestUpdateHandler(private val updateDataExtractor: UpdateDataE
             requestIterator.remove()
             return handled()
         }
-        return unmatched()
+        return skipped()
     }
 
     override fun getOrder() = super.getOrder() + 100

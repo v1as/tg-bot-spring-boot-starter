@@ -4,7 +4,6 @@ import java.time.Duration.ofSeconds
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import ru.v1as.tg.starter.update.BaseUpdateDataExtractor
-import ru.v1as.tg.starter.update.handle.HandledType
 import ru.v1as.tg.starter.update.messageUpdate
 
 class BaseRequestUpdateHandlerTest {
@@ -15,11 +14,11 @@ class BaseRequestUpdateHandlerTest {
     fun `Should remove one off request`() {
         var mathed = false
         handler.register(UpdateRequest({ mathed = true }, ofSeconds(3)))
-        assertTrue(handler.handle(messageUpdate()).isDone())
+        assertTrue(handler.handle(messageUpdate()).isHandled)
         assertTrue(mathed)
 
         mathed = false
-        assertFalse(handler.handle(messageUpdate()).isDone())
+        assertFalse(handler.handle(messageUpdate()).isHandled)
         assertFalse(mathed)
     }
 
@@ -35,11 +34,11 @@ class BaseRequestUpdateHandlerTest {
                 ofSeconds(3),
             )
         )
-        assertEquals(HandledType.ERROR, handler.handle(messageUpdate()).type)
+        assertTrue(handler.handle(messageUpdate()).isError)
         assertTrue(mathed)
 
         mathed = false
-        assertFalse(handler.handle(messageUpdate()).isDone())
+        assertFalse(handler.handle(messageUpdate()).isHandled)
         assertFalse(mathed)
     }
 
@@ -49,7 +48,7 @@ class BaseRequestUpdateHandlerTest {
         val request = UpdateRequest({ mathed = true }, ofSeconds(3))
         handler.register(request)
         request.cancel()
-        assertFalse(handler.handle(messageUpdate()).isDone())
+        assertFalse(handler.handle(messageUpdate()).isHandled)
         assertFalse(mathed)
     }
 
@@ -59,7 +58,7 @@ class BaseRequestUpdateHandlerTest {
         val request =
             UpdateRequest({ mathed = true }, ofSeconds(3), filter = { throw RuntimeException() })
         handler.register(request)
-        assertFalse(handler.handle(messageUpdate()).isDone())
+        assertFalse(handler.handle(messageUpdate()).isHandled)
         assertFalse(mathed)
     }
 
@@ -67,7 +66,7 @@ class BaseRequestUpdateHandlerTest {
     fun `Should match userId and chatId`() {
         var mathed = false
         handler.register(UpdateRequest({ mathed = true }, ofSeconds(3), 1, 1))
-        assertTrue(handler.handle(messageUpdate(chatId = 1, userId = 1)).isDone())
+        assertTrue(handler.handle(messageUpdate(chatId = 1, userId = 1)).isHandled)
         assertTrue(mathed)
     }
 
@@ -75,7 +74,7 @@ class BaseRequestUpdateHandlerTest {
     fun `Should not match wrong userId`() {
         var mathed = false
         handler.register(UpdateRequest({ mathed = true }, ofSeconds(3), 2, 1))
-        assertFalse(handler.handle(messageUpdate(chatId = 1, userId = 1)).isDone())
+        assertFalse(handler.handle(messageUpdate(chatId = 1, userId = 1)).isHandled)
         assertFalse(mathed)
     }
 
@@ -83,7 +82,7 @@ class BaseRequestUpdateHandlerTest {
     fun `Should not match wrong chatId`() {
         var mathed = false
         handler.register(UpdateRequest({ mathed = true }, ofSeconds(3), 1, 2))
-        assertFalse(handler.handle(messageUpdate(chatId = 1, userId = 1)).isDone())
+        assertFalse(handler.handle(messageUpdate(chatId = 1, userId = 1)).isHandled)
         assertFalse(mathed)
     }
 }

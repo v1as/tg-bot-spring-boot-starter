@@ -18,11 +18,13 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
+import org.springframework.context.annotation.Lazy
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication
 import org.telegram.telegrambots.longpolling.interfaces.BackOff
 import org.telegram.telegrambots.longpolling.util.ExponentialBackOff
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer
+import ru.operation.handler.Handled.skipped
 import ru.v1as.tg.starter.TgAbsSender
 import ru.v1as.tg.starter.TgBotRunner
 import ru.v1as.tg.starter.TgLongPollingBot
@@ -60,7 +62,7 @@ class TgBotAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(UnmatchedUpdateHandler::class)
-    fun unmatchedUpdateHandlerStub() = UnmatchedUpdateHandler {}
+    fun unmatchedUpdateHandlerStub() = UnmatchedUpdateHandler {skipped() }
 
     @Bean
     @ConditionalOnMissingBean(MdcUpdate::class)

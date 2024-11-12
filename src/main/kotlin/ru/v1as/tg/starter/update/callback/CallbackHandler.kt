@@ -1,7 +1,5 @@
 package ru.v1as.tg.starter.update.callback
 
-import ru.v1as.tg.starter.update.handle.Handler
+import ru.operation.handler.Handler
 
-interface CallbackHandler : Handler<CallbackRequest> {
-
-}
+interface CallbackHandler : Handler<CallbackRequest>
