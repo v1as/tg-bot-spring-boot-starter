@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Lazy
 import org.telegram.telegrambots.bots.DefaultBotOptions
 import org.telegram.telegrambots.meta.bots.AbsSender
 import org.telegram.telegrambots.meta.generics.LongPollingBot
+import ru.operation.handler.Handled.skipped
 import ru.v1as.tg.starter.TgAbsSender
 import ru.v1as.tg.starter.TgBotProperties
 import ru.v1as.tg.starter.TgBotRunner
@@ -39,7 +40,7 @@ class TgBotAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(UnmatchedUpdateHandler::class)
-    fun unmatchedUpdateHandlerStub() = UnmatchedUpdateHandler { }
+    fun unmatchedUpdateHandlerStub() = UnmatchedUpdateHandler { skipped() }
 
     @Bean
     @ConditionalOnMissingBean(MdcUpdate::class)
@@ -58,7 +59,7 @@ class TgBotAutoConfiguration {
         afterUpdateHandlers: List<AfterUpdateHandler>,
         baseUpdateDataExtractor: BaseUpdateDataExtractor,
         updateProcessorExceptionHandler: UpdateProcessorExceptionHandler
-    ) = BaseUpdateProcessor(
+    ): MainUpdateHandler = BaseMainUpdateHandler(
         beforeUpdateHandlers,
         updateHandlers,
         updateProcessorExceptionHandler,
@@ -74,9 +75,9 @@ class TgBotAutoConfiguration {
     fun longPollingBot(
         options: DefaultBotOptions,
         props: TgBotProperties,
-        updateProcessor: UpdateProcessor
+        mainUpdateHandler: MainUpdateHandler
     ) =
-        TgLongPollingBot(options, props, updateProcessor)
+        TgLongPollingBot(options, props, mainUpdateHandler)
 
     @Bean
     fun botRunner(tgBot: LongPollingBot, props: TgBotProperties) = TgBotRunner(tgBot, props)

@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "com.github.v1as"
-version = "0.0.3"
+version = "0.0.4"
 java {
     sourceCompatibility = JavaVersion.VERSION_17
     withSourcesJar()
@@ -25,12 +25,14 @@ configurations {
 
 repositories {
     mavenCentral()
+    mavenLocal()
 }
 
 dependencies {
     api("org.telegram:telegrambots:6.8.0")
     api("io.github.microutils:kotlin-logging-jvm:3.0.4")
     implementation("org.springframework.boot:spring-boot-starter")
+    implementation("ru.operation:handletility:0.0.1")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compileOnly("org.projectlombok:lombok")

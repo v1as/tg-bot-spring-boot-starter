@@ -2,7 +2,7 @@ package ru.v1as.tg.starter.update
 
 import org.springframework.core.Ordered
 import org.telegram.telegrambots.meta.api.objects.Update
-import ru.v1as.tg.starter.update.handle.Handler
+import ru.operation.handler.Handler
 
 interface UpdateHandler : Handler<Update>, Ordered {
     companion object {

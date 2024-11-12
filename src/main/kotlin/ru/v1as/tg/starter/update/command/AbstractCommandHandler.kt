@@ -1,43 +1,33 @@
 package ru.v1as.tg.starter.update.command
 
-import mu.KotlinLogging
+import ru.operation.handler.AbstractHandler
+import ru.operation.handler.Handled
+import ru.operation.handler.Handled.handled
 import ru.v1as.tg.starter.exceptions.TgBotMethodApiException
 import ru.v1as.tg.starter.model.base.TgChatWrapper
 import ru.v1as.tg.starter.model.base.TgUserWrapper
-import ru.v1as.tg.starter.update.handle.Handled
-import ru.v1as.tg.starter.update.handle.error
-import ru.v1as.tg.starter.update.handle.handled
-import ru.v1as.tg.starter.update.handle.unmatched
-
-private val log = KotlinLogging.logger {}
+import java.lang.Exception
 
 abstract class AbstractCommandHandler(
     private val commandName: String,
     private val description: String = ""
-) : CommandHandler {
+) : AbstractHandler<CommandRequest>(), CommandHandler {
 
+    override fun check(input: CommandRequest) = input.name == commandName
 
-    override fun handle(command: CommandRequest): Handled {
-        if (match(command)) {
-            return unmatched()
-        }
+    override fun handleInternal(command: CommandRequest): Handled {
         val user = TgUserWrapper(command.message.from)
         val chat = TgChatWrapper(command.message.chat)
-        try {
-            handle(command, user, chat)
-        } catch (ex: TgBotMethodApiException) {
-            throw ex
-        } catch (ex: Exception) {
-            log.error(ex) { "Error for command handling $command" }
-            return error(ex)
-        }
+        handle(command, user, chat)
         return handled()
     }
 
-    protected open fun match(command: CommandRequest): Boolean =
-        command.name != commandName
-
     abstract fun handle(command: CommandRequest, user: TgUserWrapper, chat: TgChatWrapper)
+
+    override fun onException(input: CommandRequest, ex: Exception) =
+        if (ex is TgBotMethodApiException)
+            throw ex
+        else super.onException(input, ex)
 
     override fun description() = description.ifEmpty { commandName }
 }

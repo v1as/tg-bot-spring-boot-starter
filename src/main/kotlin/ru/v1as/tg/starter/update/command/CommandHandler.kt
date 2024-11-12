@@ -1,6 +1,6 @@
 package ru.v1as.tg.starter.update.command
 
-import ru.v1as.tg.starter.update.handle.Handler
+import ru.operation.handler.Handler
 
 interface CommandHandler : Handler<CommandRequest> {
     fun description() = ""

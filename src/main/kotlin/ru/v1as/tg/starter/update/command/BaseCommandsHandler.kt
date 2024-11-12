@@ -2,22 +2,24 @@ package ru.v1as.tg.starter.update.command
 
 import mu.KotlinLogging
 import org.telegram.telegrambots.meta.api.objects.Update
+import ru.operation.handler.Handler
+import ru.operation.handler.impl.list.HandlerList
 import ru.v1as.tg.starter.update.UpdateHandler
-import ru.v1as.tg.starter.update.handle.AbstractListHandler
-import ru.v1as.tg.starter.update.handle.Handler
 
 private val log = KotlinLogging.logger {}
 
 class BaseCommandsHandler(
     commandHandlers: List<CommandHandler>
-) : AbstractListHandler<Update, CommandRequest>(commandHandlers), UpdateHandler {
+) : UpdateHandler {
 
-    override fun stringify(handler: Handler<CommandRequest>): String {
+    private val commandHandlers = HandlerList(commandHandlers)
+
+    fun stringify(handler: Handler<CommandRequest>): String {
         val cmd = handler as CommandHandler
         return "Command '${cmd.description()}'(${cmd.javaClass}) registered."
     }
 
-    override fun map(input: Update): CommandRequest? {
+    fun map(input: Update): CommandRequest? {
         if (input.message?.isCommand != true) {
             return null
         }
@@ -25,4 +27,6 @@ class BaseCommandsHandler(
         log.debug { "Command parsed: $command from '${input.message.text}'" }
         return command
     }
+
+    override fun handle(update: Update) = commandHandlers.handle(map(update))
 }
