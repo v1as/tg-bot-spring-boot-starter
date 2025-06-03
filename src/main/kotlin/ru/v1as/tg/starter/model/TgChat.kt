@@ -1,6 +1,7 @@
 package ru.v1as.tg.starter.model
 
-import org.telegram.telegrambots.meta.api.objects.Chat
+import org.telegram.telegrambots.meta.api.objects.chat.Chat
+
 
 const val USER_CHAT_TYPE = "private"
 const val GROUP_CHAT_TYPE = "group"
@@ -14,8 +15,6 @@ interface TgChat {
     fun idStr() = getId().toString()
 
     fun title(): String
-
-    fun description(): String
 
     fun isUserChat(): Boolean
 

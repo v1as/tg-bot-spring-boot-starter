@@ -4,16 +4,16 @@ plugins {
     `maven-publish`
     `java-library`
     `java-test-fixtures`
-    id("org.springframework.boot") version "2.7.12"
-    id("io.spring.dependency-management") version "1.1.0"
-    kotlin("jvm") version "1.6.21"
-    kotlin("plugin.spring") version "1.6.21"
+    id("org.springframework.boot") version "3.5.0"
+    id("io.spring.dependency-management") version "1.1.7"
+    kotlin("jvm") version "1.9.25"
+    kotlin("plugin.spring") version "1.9.25"
 }
 
 group = "com.github.v1as"
-version = "0.0.3"
+version = "0.0.4"
 java {
-    sourceCompatibility = JavaVersion.VERSION_17
+    sourceCompatibility = JavaVersion.VERSION_21
     withSourcesJar()
 }
 
@@ -28,8 +28,10 @@ repositories {
 }
 
 dependencies {
-    api("org.telegram:telegrambots:6.8.0")
-    api("io.github.microutils:kotlin-logging-jvm:3.0.4")
+    api("org.telegram:telegrambots-longpolling:8.3.0")
+    api("org.telegram:telegrambots-client:8.3.0")
+    api("io.github.microutils:kotlin-logging-jvm:3.0.5")
+
     implementation("org.springframework.boot:spring-boot-starter")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
@@ -45,7 +47,7 @@ dependencies {
 tasks.withType<KotlinCompile> {
     kotlinOptions {
         freeCompilerArgs = listOf("-Xjsr305=strict")
-        jvmTarget = "17"
+        jvmTarget = "21"
     }
 }
 

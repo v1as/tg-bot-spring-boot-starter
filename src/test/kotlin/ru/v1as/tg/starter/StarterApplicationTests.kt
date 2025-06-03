@@ -4,9 +4,9 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import ru.v1as.tg.starter.configuration.TgBotAutoConfiguration
 
 @SpringBootTest
@@ -14,15 +14,15 @@ import ru.v1as.tg.starter.configuration.TgBotAutoConfiguration
 @TestPropertySource(locations = ["classpath:application.yml"])
 class StarterApplicationTests {
 
-    @MockBean
+    @MockitoBean
     var ignored: TgBotRunner? = null
 
     @Autowired
-    var bot: TgLongPollingBot? = null
+    var props: TgBotProperties? = null
 
     @Test
     fun botWasStarted() {
-        assertEquals("TEST_BOT", bot?.botUsername)
+        assertEquals("TEST_BOT", props?.username)
     }
 
 }

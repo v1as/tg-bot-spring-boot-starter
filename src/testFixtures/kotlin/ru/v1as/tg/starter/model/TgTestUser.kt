@@ -21,11 +21,10 @@ class TgTestUser(
     override fun languageCode(): String = languageCode
 
     override fun model(): User {
-        val user = User()
-        user.userName = userName
-        user.firstName = firstName
-        user.lastName = lastName
-        user.languageCode = languageCode
+        val user = User(id(), firstName(), false)
+        user.userName = userName()
+        user.lastName = lastName()
+        user.languageCode = languageCode()
         return user
     }
 }

@@ -1,7 +1,7 @@
 package ru.v1as.tg.starter.update.handle
 
+import jakarta.annotation.PostConstruct
 import mu.KLoggable
-import javax.annotation.PostConstruct
 
 
 abstract class AbstractListHandler<T, I>(private val handlers: List<Handler<I>>) : Handler<T>, KLoggable {

@@ -1,7 +1,7 @@
 package ru.v1as.tg.starter.update.request
 
-import org.telegram.telegrambots.meta.api.objects.Message
 import org.telegram.telegrambots.meta.api.objects.Update
+import org.telegram.telegrambots.meta.api.objects.message.Message
 import ru.v1as.tg.starter.model.TgUser
 import java.time.Duration
 import java.time.LocalDateTime
@@ -13,7 +13,7 @@ fun replyOnMessageRequest(
     timeout,
     tgUser?.id(),
     msg.chatId,
-    { it.message?.hasText() ?: false && it.message?.replyToMessage?.messageId == msg.messageId })
+    { it.message?.hasText() == true && it.message?.replyToMessage?.messageId == msg.messageId })
 
 class UpdateRequest(
     val onMatch: Consumer<Update>,

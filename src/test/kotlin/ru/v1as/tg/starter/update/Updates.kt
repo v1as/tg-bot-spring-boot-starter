@@ -1,6 +1,8 @@
 package ru.v1as.tg.starter.update
 
 import org.telegram.telegrambots.meta.api.objects.*
+import org.telegram.telegrambots.meta.api.objects.chat.Chat
+import org.telegram.telegrambots.meta.api.objects.message.Message
 import java.util.concurrent.atomic.AtomicInteger
 
 private val messageIdCounter = AtomicInteger()
@@ -19,13 +21,10 @@ fun messageUpdate(text: String = "", chatId: Long = 1, userId: Long = 1): Update
 fun message(
     text: String, chatId: Long = 1, userId: Long = 1
 ): Message {
-    val user = User()
-    user.id = userId
+    val user = User(userId, "Bob", false)
     user.userName = ""
-    user.firstName = "Bob"
 
-    val chat = Chat()
-    chat.id = chatId
+    val chat = Chat(chatId, "group")
 
     val message = Message()
     message.from = user
@@ -33,10 +32,8 @@ fun message(
     message.text = text
     message.messageId = messageIdCounter.getAndIncrement()
     if (text.startsWith("/")) {
-        val messageEntity = MessageEntity()
+        val messageEntity = MessageEntity(EntityType.BOTCOMMAND, 0, text.length)
         messageEntity.text = text
-        messageEntity.type = EntityType.BOTCOMMAND
-        messageEntity.offset = 0
         message.entities = listOf(messageEntity)
     }
     return message

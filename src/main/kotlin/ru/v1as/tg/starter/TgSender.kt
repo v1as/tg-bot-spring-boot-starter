@@ -1,6 +1,6 @@
 package ru.v1as.tg.starter
 
-import org.telegram.telegrambots.meta.api.methods.BotApiMethod
+import org.telegram.telegrambots.meta.api.methods.botapimethods.BotApiMethod
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import ru.v1as.tg.starter.model.TgChat
 import java.io.Serializable

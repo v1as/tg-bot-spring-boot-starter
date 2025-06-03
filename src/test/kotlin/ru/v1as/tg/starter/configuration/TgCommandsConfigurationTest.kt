@@ -5,10 +5,10 @@ import org.junit.jupiter.api.Test
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.context.TestConfiguration
-import org.springframework.boot.test.mock.mockito.MockBean
 import org.springframework.context.annotation.Bean
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
+import org.springframework.test.context.bean.override.mockito.MockitoBean
 import ru.v1as.tg.starter.TgBotRunner
 import ru.v1as.tg.starter.TgLongPollingBot
 import ru.v1as.tg.starter.model.base.TgChatWrapper
@@ -24,7 +24,7 @@ import java.util.concurrent.atomic.AtomicBoolean
 class TgCommandsConfigurationTest {
 
 
-    @MockBean
+    @MockitoBean
     var ignored: TgBotRunner? = null
 
     @Autowired
@@ -36,7 +36,7 @@ class TgCommandsConfigurationTest {
 
     @Test
     fun `Command should be processed`() {
-        bot?.onUpdateReceived(messageUpdate(text = "/test"))
+        bot?.consume(messageUpdate(text = "/test"))
         assertTrue(testableConfiguration!!.processed.get())
     }
 

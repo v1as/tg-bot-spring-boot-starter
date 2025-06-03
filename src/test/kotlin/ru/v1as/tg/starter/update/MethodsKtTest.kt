@@ -7,8 +7,8 @@ class MethodsKtTest {
     @Test
     fun shouldCreateEditMessage() {
         val edit = editMessageText {
-            text = "some text"
-            messageId = 123
+            text("some text")
+            messageId(123)
         }
         assertEquals("some text", edit.text)
         assertEquals(123, edit.messageId)

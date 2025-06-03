@@ -5,26 +5,26 @@ import org.telegram.telegrambots.meta.api.methods.send.SendMessage
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageText
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 
-fun editMessageText(block: EditMessageText.() -> Unit): EditMessageText {
-    val edit = EditMessageText()
+fun editMessageText(block: EditMessageText.EditMessageTextBuilder<*, *>.() -> Unit): EditMessageText {
+    val edit = EditMessageText.builder()
     edit.apply(block)
-    return edit
+    return edit.build()
 }
 
-fun sendMessage(block: SendMessage.() -> Unit): SendMessage {
-    val message = SendMessage()
+fun sendMessage(block: SendMessage.SendMessageBuilder<*, *>.() -> Unit): SendMessage {
+    val message = SendMessage.builder()
     message.apply(block)
-    return message
+    return message.build()
 }
 
-fun answerCallbackQuery(block: AnswerCallbackQuery.() -> Unit): AnswerCallbackQuery {
-    val query = AnswerCallbackQuery()
+fun answerCallbackQuery(block: AnswerCallbackQuery.AnswerCallbackQueryBuilder<*, *>.() -> Unit): AnswerCallbackQuery {
+    val query = AnswerCallbackQuery.builder()
     query.apply(block)
-    return query
+    return query.build()
 }
 
-fun inlineKeyboardButton(block: InlineKeyboardButton.() -> Unit): InlineKeyboardButton {
-    val button = InlineKeyboardButton()
+fun inlineKeyboardButton(block: InlineKeyboardButton.InlineKeyboardButtonBuilder<*, *>.() -> Unit): InlineKeyboardButton {
+    val button = InlineKeyboardButton.builder()
     button.apply(block)
-    return button
+    return button.build()
 }

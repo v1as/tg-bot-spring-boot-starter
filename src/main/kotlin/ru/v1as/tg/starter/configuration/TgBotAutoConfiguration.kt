@@ -6,10 +6,8 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
-import org.springframework.context.annotation.Lazy
-import org.telegram.telegrambots.bots.DefaultBotOptions
-import org.telegram.telegrambots.meta.bots.AbsSender
-import org.telegram.telegrambots.meta.generics.LongPollingBot
+import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient
+import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer
 import ru.v1as.tg.starter.TgAbsSender
 import ru.v1as.tg.starter.TgBotProperties
 import ru.v1as.tg.starter.TgBotRunner
@@ -56,7 +54,6 @@ class TgBotAutoConfiguration {
         updateHandlers: List<UpdateHandler>,
         unmatchedUpdateHandler: UnmatchedUpdateHandler,
         afterUpdateHandlers: List<AfterUpdateHandler>,
-        baseUpdateDataExtractor: BaseUpdateDataExtractor,
         updateProcessorExceptionHandler: UpdateProcessorExceptionHandler
     ) = BaseUpdateProcessor(
         beforeUpdateHandlers,
@@ -68,21 +65,18 @@ class TgBotAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    fun botOptions() = DefaultBotOptions()
+    fun httpTelegramClient(props: TgBotProperties) = OkHttpTelegramClient(props.token)
 
     @Bean
     fun longPollingBot(
-        options: DefaultBotOptions,
-        props: TgBotProperties,
         updateProcessor: UpdateProcessor
-    ) =
-        TgLongPollingBot(options, props, updateProcessor)
+    ) = TgLongPollingBot(updateProcessor)
 
     @Bean
-    fun botRunner(tgBot: LongPollingBot, props: TgBotProperties) = TgBotRunner(tgBot, props)
+    fun botRunner(tgBot: LongPollingSingleThreadUpdateConsumer, props: TgBotProperties) = TgBotRunner(tgBot, props)
 
     @Bean
-    fun tgSender(@Lazy absSender: AbsSender) = TgAbsSender(absSender)
+    fun tgSender(tgHttpClient: OkHttpTelegramClient) = TgAbsSender(tgHttpClient)
 
 }
 
