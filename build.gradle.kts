@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "com.github.v1as"
-version = "0.0.4"
+version = "0.0.5"
 java {
     sourceCompatibility = JavaVersion.VERSION_21
     withSourcesJar()

@@ -1,4 +1,4 @@
-package ru.v1as.tg.starter
+package ru.v1as.tg.starter.configuration.properties
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 
@@ -8,4 +8,5 @@ class TgBotProperties(
     var username: String = "",
     var runnable: Boolean = true,
     var gracefulShutdown: Boolean = true,
+    var proxy: TgBotProxyProperties = TgBotProxyProperties()
 )

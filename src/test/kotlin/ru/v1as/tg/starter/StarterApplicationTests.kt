@@ -8,6 +8,7 @@ import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.context.TestPropertySource
 import org.springframework.test.context.bean.override.mockito.MockitoBean
 import ru.v1as.tg.starter.configuration.TgBotAutoConfiguration
+import ru.v1as.tg.starter.configuration.properties.TgBotProperties
 
 @SpringBootTest
 @ContextConfiguration(classes = [TgBotAutoConfiguration::class])

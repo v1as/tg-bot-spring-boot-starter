@@ -1,5 +1,7 @@
 package ru.v1as.tg.starter.configuration
 
+import okhttp3.OkHttpClient
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.boot.autoconfigure.AutoConfiguration
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
@@ -9,16 +11,29 @@ import org.springframework.context.annotation.Import
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer
 import ru.v1as.tg.starter.TgAbsSender
-import ru.v1as.tg.starter.TgBotProperties
 import ru.v1as.tg.starter.TgBotRunner
 import ru.v1as.tg.starter.TgLongPollingBot
-import ru.v1as.tg.starter.update.*
+import ru.v1as.tg.starter.configuration.properties.TgBotProperties
+import ru.v1as.tg.starter.update.AfterUpdateHandler
+import ru.v1as.tg.starter.update.BaseUpdateDataExtractor
+import ru.v1as.tg.starter.update.BaseUpdateProcessor
+import ru.v1as.tg.starter.update.BeforeUpdateHandler
+import ru.v1as.tg.starter.update.UnmatchedUpdateHandler
+import ru.v1as.tg.starter.update.UpdateDataExtractor
+import ru.v1as.tg.starter.update.UpdateHandler
+import ru.v1as.tg.starter.update.UpdateProcessor
 import ru.v1as.tg.starter.update.exception.UpdateProcessorExceptionHandler
 import ru.v1as.tg.starter.update.log.BaseMdcUpdate
 import ru.v1as.tg.starter.update.log.MdcUpdate
 import ru.v1as.tg.starter.update.member.LogChatMemberUpdatedHandler
 import ru.v1as.tg.starter.update.request.BaseRequestUpdateHandler
 import ru.v1as.tg.starter.update.request.RequestUpdateHandler
+import java.net.Authenticator
+import java.net.InetSocketAddress
+import java.net.PasswordAuthentication
+import java.net.Proxy
+
+const val OK_HTTP_CLIENT_BEAN = "tgOkHttpClient"
 
 @AutoConfiguration
 @ConditionalOnProperty("tg.bot.token")
@@ -63,9 +78,30 @@ class TgBotAutoConfiguration {
         afterUpdateHandlers,
     )
 
+    @Bean(OK_HTTP_CLIENT_BEAN)
+    @ConditionalOnMissingBean(name = [OK_HTTP_CLIENT_BEAN], value = [OkHttpTelegramClient::class])
+    fun tgOkHttpClient(props: TgBotProperties): OkHttpClient {
+        val httpClient = OkHttpClient.Builder()
+        val proxyProps = props.proxy
+        if (proxyProps.host.isNotBlank()) {
+            val proxy = Proxy(proxyProps.type, InetSocketAddress(proxyProps.host, proxyProps.port))
+            if (proxyProps.username.isNotBlank()) {
+                if (proxyProps.username.isNotBlank() && proxyProps.password.isNotBlank()) {
+                    Authenticator.setDefault(object : Authenticator() {
+                        override fun getPasswordAuthentication() =
+                            PasswordAuthentication(proxyProps.username, proxyProps.password.toCharArray())
+                    })
+                }
+            }
+            httpClient.proxy(proxy)
+        }
+        return httpClient.build()
+    }
+
     @Bean
     @ConditionalOnMissingBean
-    fun httpTelegramClient(props: TgBotProperties) = OkHttpTelegramClient(props.token)
+    fun httpTelegramClient(props: TgBotProperties, @Qualifier(OK_HTTP_CLIENT_BEAN) httpClient: OkHttpClient) =
+        OkHttpTelegramClient(httpClient, props.token)
 
     @Bean
     fun longPollingBot(

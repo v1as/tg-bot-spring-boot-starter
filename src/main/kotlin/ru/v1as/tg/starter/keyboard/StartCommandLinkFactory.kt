@@ -3,7 +3,7 @@ package ru.v1as.tg.starter.keyboard
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardRow
-import ru.v1as.tg.starter.TgBotProperties
+import ru.v1as.tg.starter.configuration.properties.TgBotProperties
 
 class StartCommandLinkFactory(val tgBot: TgBotProperties) {
 

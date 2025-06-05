@@ -5,8 +5,8 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.core.Ordered
 import org.springframework.core.annotation.Order
-import ru.v1as.tg.starter.TgBotProperties
 import ru.v1as.tg.starter.TgSender
+import ru.v1as.tg.starter.configuration.properties.TgBotProperties
 import ru.v1as.tg.starter.keyboard.StartCommandLinkFactory
 import ru.v1as.tg.starter.update.UpdateDataExtractor
 import ru.v1as.tg.starter.update.command.BaseCommandsHandler

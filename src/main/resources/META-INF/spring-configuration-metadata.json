@@ -2,7 +2,7 @@
   "groups": [
     {
       "name": "tg",
-      "type": "ru.v1as.tg.starter.TgBotProperties"
+      "type": "ru.v1as.tg.starter.configuration.properties.TgBotProperties"
     }
   ],
   "properties": [
@@ -10,26 +10,26 @@
       "name": "tg.bot.token",
       "type": "java.lang.String",
       "description": "Telegram bot token",
-      "sourceType": "ru.v1as.tg.starter.TgBotProperties"
+      "sourceType": "ru.v1as.tg.starter.configuration.properties.TgBotProperties"
     },
     {
       "name": "tg.bot.username",
       "type": "java.lang.String",
       "description": "Telegram bot username",
-      "sourceType": "ru.v1as.tg.starter.TgBotProperties"
+      "sourceType": "ru.v1as.tg.starter.configuration.properties.TgBotProperties"
     },
     {
       "name": "tg.bot.runnable",
       "type": "java.lang.Boolean",
       "description": "Running bot on start",
-      "sourceType": "ru.v1as.tg.starter.TgBotProperties",
+      "sourceType": "ru.v1as.tg.starter.configuration.properties.TgBotProperties",
       "defaultValue": "true"
     },
     {
       "name": "tg.bot.graceful-shutdown",
       "type": "java.lang.Boolean",
       "description": "Graceful bot shutdown with session stop waiting",
-      "sourceType": "ru.v1as.tg.starter.TgBotProperties",
+      "sourceType": "ru.v1as.tg.starter.configuration.properties.TgBotProperties",
       "defaultValue": "true"
     }
   ]
