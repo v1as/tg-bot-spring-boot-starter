@@ -12,10 +12,9 @@ private val log = KotlinLogging.logger {}
 
 open class TgBotRunner(
     private val tgBot: LongPollingSingleThreadUpdateConsumer,
-    private val props: TgBotProperties
+    private val botsApplication: TelegramBotsLongPollingApplication,
+    private val props: TgBotProperties,
 ) : ApplicationRunner, DisposableBean {
-
-    private val botsApplication = TelegramBotsLongPollingApplication()
 
     override fun run(args: ApplicationArguments?) {
         if (props.runnable) {
