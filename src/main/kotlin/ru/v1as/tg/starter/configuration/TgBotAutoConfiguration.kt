@@ -1,12 +1,6 @@
 package ru.v1as.tg.starter.configuration
 
 import com.fasterxml.jackson.databind.ObjectMapper
-import java.net.Authenticator
-import java.net.InetSocketAddress
-import java.net.PasswordAuthentication
-import java.net.Proxy
-import java.util.concurrent.Executors
-import java.util.concurrent.TimeUnit.SECONDS
 import mu.KLogging
 import okhttp3.ConnectionPool
 import okhttp3.Dispatcher
@@ -18,7 +12,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty
 import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Import
-import org.springframework.context.annotation.Lazy
 import org.telegram.telegrambots.client.okhttp.OkHttpTelegramClient
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication
 import org.telegram.telegrambots.longpolling.interfaces.BackOff
@@ -29,13 +22,26 @@ import ru.v1as.tg.starter.TgAbsSender
 import ru.v1as.tg.starter.TgBotRunner
 import ru.v1as.tg.starter.TgLongPollingBot
 import ru.v1as.tg.starter.configuration.properties.TgBotProperties
-import ru.v1as.tg.starter.update.*
+import ru.v1as.tg.starter.update.AfterUpdateHandler
+import ru.v1as.tg.starter.update.BaseMainUpdateHandler
+import ru.v1as.tg.starter.update.BaseUpdateDataExtractor
+import ru.v1as.tg.starter.update.BeforeUpdateHandler
+import ru.v1as.tg.starter.update.MainUpdateHandler
+import ru.v1as.tg.starter.update.UnmatchedUpdateHandler
+import ru.v1as.tg.starter.update.UpdateDataExtractor
+import ru.v1as.tg.starter.update.UpdateHandler
 import ru.v1as.tg.starter.update.exception.UpdateProcessorExceptionHandler
 import ru.v1as.tg.starter.update.log.BaseMdcUpdate
 import ru.v1as.tg.starter.update.log.MdcUpdate
 import ru.v1as.tg.starter.update.member.LogChatMemberUpdatedHandler
 import ru.v1as.tg.starter.update.request.BaseRequestUpdateHandler
 import ru.v1as.tg.starter.update.request.RequestUpdateHandler
+import java.net.Authenticator
+import java.net.InetSocketAddress
+import java.net.PasswordAuthentication
+import java.net.Proxy
+import java.util.concurrent.Executors
+import java.util.concurrent.TimeUnit.SECONDS
 
 const val OK_HTTP_CLIENT_BEAN = "tgOkHttpClient"
 
@@ -62,7 +68,7 @@ class TgBotAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(UnmatchedUpdateHandler::class)
-    fun unmatchedUpdateHandlerStub() = UnmatchedUpdateHandler {skipped() }
+    fun unmatchedUpdateHandlerStub() = UnmatchedUpdateHandler { skipped() }
 
     @Bean
     @ConditionalOnMissingBean(MdcUpdate::class)
@@ -80,7 +86,7 @@ class TgBotAutoConfiguration {
         afterUpdateHandlers: List<AfterUpdateHandler>,
         updateProcessorExceptionHandler: UpdateProcessorExceptionHandler,
     ) =
-        BaseUpdateProcessor(
+        BaseMainUpdateHandler(
             beforeUpdateHandlers,
             updateHandlers,
             updateProcessorExceptionHandler,
@@ -143,7 +149,7 @@ class TgBotAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean
-    fun longPollingBot(updateProcessor: UpdateProcessor) = TgLongPollingBot(updateProcessor)
+    fun longPollingBot(updateProcessor: MainUpdateHandler) = TgLongPollingBot(updateProcessor)
 
     @Bean @ConditionalOnMissingBean fun fixedDurationBackOff(): BackOff = ExponentialBackOff()
 

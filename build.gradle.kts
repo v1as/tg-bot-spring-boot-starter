@@ -25,6 +25,13 @@ configurations {
 
 repositories {
     mavenCentral()
+    maven {
+        url = uri("https://maven.pkg.github.com/v1as/handletility")
+        credentials {
+            username = System.getenv("GITHUB_USERNAME")
+            password = System.getenv("GITHUB_TOKEN")
+        }
+    }
 }
 
 dependencies {
@@ -33,7 +40,7 @@ dependencies {
     api("io.github.microutils:kotlin-logging-jvm:3.0.5")
 
     implementation("org.springframework.boot:spring-boot-starter")
-    implementation("ru.operation:handletility:0.0.1")
+    implementation ("ru.operation:handletility:0.0.1")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compileOnly("org.projectlombok:lombok")

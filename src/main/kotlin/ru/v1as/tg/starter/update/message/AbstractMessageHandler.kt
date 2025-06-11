@@ -1,11 +1,11 @@
 package ru.v1as.tg.starter.update.message
 
+import ru.operation.handler.Handled
 import ru.v1as.tg.starter.exceptions.TgBotMethodApiException
 import ru.v1as.tg.starter.model.TgChat
 import ru.v1as.tg.starter.model.TgUser
 import ru.v1as.tg.starter.model.base.TgChatWrapper
 import ru.v1as.tg.starter.model.base.TgUserWrapper
-import ru.v1as.tg.starter.update.handle.Handled
 
 abstract class AbstractMessageHandler : MessageHandler {
 
@@ -21,7 +21,5 @@ abstract class AbstractMessageHandler : MessageHandler {
         }
     }
 
-    abstract fun handle(
-        request: MessageRequest, chat: TgChat, user: TgUser
-    ): Handled
+    abstract fun handle(request: MessageRequest, chat: TgChat, user: TgUser): Handled
 }
