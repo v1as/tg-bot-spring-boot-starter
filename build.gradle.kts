@@ -38,9 +38,9 @@ dependencies {
     api("org.telegram:telegrambots-longpolling:8.3.0")
     api("org.telegram:telegrambots-client:8.3.0")
     api("io.github.microutils:kotlin-logging-jvm:3.0.5")
+    api("ru.operation:handletility:0.0.1")
 
     implementation("org.springframework.boot:spring-boot-starter")
-    implementation("ru.operation:handletility:0.0.1")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compileOnly("org.projectlombok:lombok")
