@@ -5,7 +5,9 @@ import org.springframework.beans.factory.DisposableBean
 import org.springframework.boot.ApplicationArguments
 import org.springframework.boot.ApplicationRunner
 import org.telegram.telegrambots.longpolling.TelegramBotsLongPollingApplication
+import org.telegram.telegrambots.longpolling.util.DefaultGetUpdatesGenerator
 import org.telegram.telegrambots.longpolling.util.LongPollingSingleThreadUpdateConsumer
+import ru.v1as.tg.starter.configuration.TelegramUrlParser
 import ru.v1as.tg.starter.configuration.properties.TgBotProperties
 
 private val log = KotlinLogging.logger {}
@@ -18,8 +20,20 @@ open class TgBotRunner(
 
     override fun run(args: ApplicationArguments?) {
         if (props.runnable) {
-            botsApplication.registerBot(props.token, tgBot)
-            log.info { "Bot '${props.username}' started" }
+            val apiUrl = props.apiUrl?.trim()?.takeIf { it.isNotEmpty() }
+            if (apiUrl != null) {
+                val telegramUrl = TelegramUrlParser.parse(apiUrl)
+                botsApplication.registerBot(
+                    props.token,
+                    { telegramUrl },
+                    DefaultGetUpdatesGenerator(),
+                    tgBot,
+                )
+                log.info { "Bot '${props.username}' started with custom API URL: $apiUrl" }
+            } else {
+                botsApplication.registerBot(props.token, tgBot)
+                log.info { "Bot '${props.username}' started" }
+            }
         } else {
             log.info { "Bot '${props.username}' is not runnable" }
         }

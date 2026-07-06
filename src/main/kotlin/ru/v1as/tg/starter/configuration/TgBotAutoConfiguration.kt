@@ -75,7 +75,8 @@ class TgBotAutoConfiguration {
     fun baseMdcUpdate(baseUpdateDataExtractor: BaseUpdateDataExtractor) =
         BaseMdcUpdate(baseUpdateDataExtractor)
 
-    @Bean fun logChatMemberUpdatedHandler() = LogChatMemberUpdatedHandler()
+    @Bean
+    fun logChatMemberUpdatedHandler() = LogChatMemberUpdatedHandler()
 
     @Bean
     @ConditionalOnMissingBean
@@ -144,14 +145,23 @@ class TgBotAutoConfiguration {
     @ConditionalOnMissingBean
     fun httpTelegramClient(
         props: TgBotProperties,
-        @Qualifier(OK_HTTP_CLIENT_BEAN) httpClient: OkHttpClient,
-    ) = OkHttpTelegramClient(httpClient, props.token)
+        @Qualifier(OK_HTTP_CLIENT_BEAN) httpClient: OkHttpClient
+    ): OkHttpTelegramClient {
+        val apiUrl = props.apiUrl?.trim()?.takeIf { it.isNotEmpty() }
+        return if (apiUrl != null) {
+            OkHttpTelegramClient(httpClient, props.token, TelegramUrlParser.parse(apiUrl))
+        } else {
+            OkHttpTelegramClient(httpClient, props.token)
+        }
+    }
 
     @Bean
     @ConditionalOnMissingBean
     fun longPollingBot(updateProcessor: MainUpdateHandler) = TgLongPollingBot(updateProcessor)
 
-    @Bean @ConditionalOnMissingBean fun fixedDurationBackOff(): BackOff = ExponentialBackOff()
+    @Bean
+    @ConditionalOnMissingBean
+    fun fixedDurationBackOff(): BackOff = ExponentialBackOff()
 
     @Bean
     @ConditionalOnMissingBean

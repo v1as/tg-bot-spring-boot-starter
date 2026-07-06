@@ -11,7 +11,7 @@ plugins {
 }
 
 group = "com.github.v1as"
-version = "0.0.6"
+version = "0.0.7"
 java {
     sourceCompatibility = JavaVersion.VERSION_21
     withSourcesJar()
@@ -40,7 +40,7 @@ dependencies {
     api("io.github.microutils:kotlin-logging-jvm:3.0.5")
 
     implementation("org.springframework.boot:spring-boot-starter")
-    implementation ("ru.operation:handletility:0.0.1")
+    implementation("ru.operation:handletility:0.0.1")
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     compileOnly("org.projectlombok:lombok")
@@ -70,6 +70,16 @@ tasks.jar {
     archiveClassifier.set("")
 }
 publishing {
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/v1as/tg-bot-spring-boot-starter")
+            credentials {
+                username = System.getenv("GITHUB_USERNAME")
+                password = System.getenv("GITHUB_TOKEN")
+            }
+        }
+    }
     publications {
         create<MavenPublication>("maven") {
             groupId = project.group.toString()
